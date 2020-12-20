@@ -13,20 +13,22 @@
 project status is WIP
 
 ## Stack
-* back: Node.js, Express.js
-* front: Vue.js, sweetAlert.js
+* back: Node.js, Express.js ... see ./package.json
+* front: Vue.js, sweetAlert.js ... see ./client/package.json
 * testing: postman
 
 ## Todo
-- [x] design front
-- [ ] design db
-- [ ] set up boilerplate: node express mongo, vue
-- [ ] basic design
-  - [ ] 1 form
-  - [ ] 1 container to list rooms
-- [ ] deploy
-- [ ] secure secrets variables
-- [ ] eslint 
+- [x] set up boilerplate: node express mongo, vue
+- [x] deploy workflow
+- [x] design db
+- [x] secure secrets variables
+- [x] basic design
+  - [x] 1 form to query db
+  - [x] 1 container to list available rooms
+- [ ] switch to composition API (ongoing)
+- [ ] split code between more components
+- [ ] design frontend with some bootstrap-like library
+- [ ] lint codebase
 
 ## Setup
 WIP
