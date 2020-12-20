@@ -1,5 +1,5 @@
 # testStationF
-> some test for station f internship
+> some test that actually is occasion to discover vue 3 ( MEVN stack)
 
 ## Table of contents
 * [General info](#general-info)
@@ -15,7 +15,8 @@ project status is WIP
 ## Stack
 * back: Node.js, Express.js ... see ./package.json
 * front: Vue.js, sweetAlert.js ... see ./client/package.json
-* testing: postman
+* test: postman
+* deploy: heroku
 
 ## Todo
 - [x] set up boilerplate: node express mongo, vue
@@ -31,7 +32,15 @@ project status is WIP
 - [ ] lint codebase
 
 ## Setup
-WIP
+deployed version: https://resa-stationf.herokuapp.com/
+or clone this repo locally, then:
+```
+npm run dev
+```
+in another shell tab
+```
+npm run serve
+```
 
 ## Nice ressources
 <details><summary>(click to toggle)</summary>
