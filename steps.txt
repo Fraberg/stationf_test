@@ -1,0 +1,67 @@
+---------
+basic setup
+---------
+https://www.youtube.com/watch?v=j55fHUJqtyw&list=PLillGF-RfqbYSx-Ab1xWVanGKtowTsnNm
+
+-- 1s video
+install extensions
+$ npm init
+$ npm i express cors bodyparser mongodb
+$ npm i -D nodemon
+$ npm run dev
+create routes
+test routes with postman
+
+-- 2nd video
+$ npm i -g @vue/cli
+$ cd client && npm run serve
+$ npm i axios
+why axios https://www.vuemastery.com/courses/real-world-vue3/api-calls-with-axios
+--
+vue ui
+https://www.vuemastery.com/courses/real-world-vue3/vue-cli-creating-the-project
+to configure the project
+--
+
+-- 3rd video
+create vue.config.js
+$ npm run build
+$ heroku login
+$ heroku create
+go to heroku to finish project initialization
+$ heroku git:remote -a <appname>
+$ heroku buildpacks:set heroku/nodejs
+
+$ git push heroku main
+> error: A Node.js app on Heroku requires a 'package.json' at the root of remote:  !     the directory structure
+
+$ git subtree push --prefix project/v4 heroku master
+
+---------
+env var
+---------
+in root folder:
+$ npm i dotenv
+$ touch .env
+then use process.env.VAR
+
+---------
+room schema
+---------
+1) seed
+$ cd seed && node seed.js
+see https://cloud.mongodb.com/v2/5fda9027837cbd78137a6b81#metrics/replicaSet/5fda912cd618f048c7c01d27/explorer/STATIONF_TEST/rooms/find
+2) in routes>api>rooms.js
+    test filter rooms by name
+        create filters
+            datetimepicker https://github.com/nathanreyes/v-calendar/tree/next
+                $ npm i v-calendar@next
+                $ npm i @popperjs/core
+    add equipements https://www.spacesworks.com/fr/paris-fr/bonne-nouvelle/salles-de-reunion/?gclid=CjwKCAiAoOz-BRBdEiwAyuvA67vwMWONsrSD12BGICDXEK766DG6rrKosy3s9zPU9Yi4pbAtyLwJrhoC6o0QAvD_BwE&gclsrc=aw.ds
+    
+...
+
+--------
+design
+--------
+npm i vue-sweetalert2 https://www.npmjs.com/package/vue-sweetalert2
