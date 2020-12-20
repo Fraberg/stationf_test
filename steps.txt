@@ -64,4 +64,13 @@ see https://cloud.mongodb.com/v2/5fda9027837cbd78137a6b81#metrics/replicaSet/5fd
 --------
 design
 --------
-npm i vue-sweetalert2 https://www.npmjs.com/package/vue-sweetalert2
+npm i vue-sweetalert2 https://www.npmjs.com/package/vue-sweetalert2 but not with composition API
+
+-------
+composition API 
+https://www.vuemastery.com/courses/vue-3-essentials/lifecycle-hooks
+APIs calls used to be placed in created() are now in setup()
+
+This dependency was not found:
+* @vue/composition-api in ./src/use/promise.js
+To install it, you can run: npm install --save @vue/composition-api

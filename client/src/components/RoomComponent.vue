@@ -7,9 +7,9 @@
         <div class="mb-4">
           <!-- date range picker -->
           <v-date-picker
-            v-model="range"
+            v-model="ca_range"
             mode="dateTime"
-            :masks="masks"
+            :masks="ca_masks"
             is-range
             :min-date='new Date().setHours(0,0,0,0)'
             :minute-increment="5"
@@ -44,17 +44,17 @@
           <!-- capacity -->
           <div class="capacity">
             <p class="label-capacity">Capacité</p>
-            <input v-model="capacity" type="number" step="1" min="1" required="true"/>
+            <input v-model="ca_selectedCapacity" type="number" step="1" min="1" required="true"/>
           </div>
           <!-- equipments -->
           <div class="equipments">
             <p class="label-equipments">Équipements</p>
-            <input v-model="selectedEquipments" placeholder="TV, Retro ..."/>
+            <input v-model="ca_selectedEquipments" placeholder="TV, Retro ..."/>
           </div>
           <!-- afficher les salles réservées -->
           <div class="label-display-if-booked">
             <p class="display-if-booked">Afficher les salles réservées</p>
-            <input type="checkbox" v-model="DisplayBookedRooms">
+            <input type="checkbox" v-model="ca_displayBookedRooms">
           </div>
           <!-- submit -->
           <!-- <div class="submit">
@@ -63,7 +63,7 @@
         </div>
       </form>
     </div>
-    <p class="filters-synthesis">{{ synthesis }}</p>
+    <p class="filters-synthesis">{{ getSynthesis }}</p>
     <hr>
     <!-- ROOMS -->
     <div class="rooms-container">
@@ -77,19 +77,19 @@
       </div>
       <hr>
       <!-- LIST -->
-      <div v-if="loading" class="loading">
+      <div v-if="ca_isLoading" class="loading">
         <h2>Chargement des salles ...</h2>
       </div>
-      <div v-else-if="error" class="error">
-        <p>{{ error }}</p>
+      <div v-else-if="ca_error" class="error">
+        <p>{{ ca_error }}</p>
       </div>
       <div class="room"
         v-else
-        v-for="(room, index) in rooms"
+        v-for="(room, index) in ca_rooms"
         v-show="
-          room.capacity >= capacity
-          && (!room.booked || DisplayBookedRooms)
-          && (!selectedEquipments.length || room.includesSelectedEquipments)"
+          room.capacity >= ca_selectedCapacity
+          && (ca_displayBookedRooms || !room.booked)
+          && (!ca_selectedEquipments.length || room.includesSelectedEquipments)"
         v-bind:item="room"
         v-bind:index="index"
         v-bind:key="room._id"
@@ -110,7 +110,7 @@
         </ul>
         <div class="reservation">
           <button v-if="!room.booked" @click="createReservation(index)">Réserver</button>
-          <p v-if="!room.booked">pour {{ duration }}</p>
+          <p v-if="!room.booked">pour {{ getRangeSpan }}</p>
           <p v-if="room.booked">{{ room.bookedInfo }}</p>
         </div>
       </div>
@@ -121,77 +121,86 @@
 <script>
 import RoomService from '../service/RoomService';
 import ReservationService from '../service/ReservationService';
+import { onBeforeMount } from 'vue';
+
+// import SearchRoomsComponent from './components/SearchRoomsComponent.vue';
+// import DisplayRoomsComponent from './components/DisplayRoomsComponent.vue';
+
 import utils from "../utils/utils";
-// import { ref } from "vue";
+import { ref, computed, watch } from 'vue';
+const Swal = require('sweetalert2');
 
 export default {
   name: 'RoomComponent',
-  data() {
-    return {
-      range: {
-        start: utils.roundDate(new Date(Date.now()), 5),
-        end: utils.roundDate(new Date(Date.now() + (30 * 60 * 1000)), 5),
-      },
-      masks: {
-        input: 'YYYY-MM-DD h:mm A',
-      },
-      capacity: 2,
-      selectedEquipments: '',
-      DisplayBookedRooms: false,
-      rooms: [],
-      reservations: [],
-      error: '',
-      loading: true
-    }
-  },
-  computed: {
-    synthesis() {
-      if (this.duration === '') {
-        const errorMsg = 'Erreur : la durée de la réservation doit être supérieure ou égale à 5 minutes';
-        this.setError(errorMsg);
+  // components: {
+  //   SearchRoomsComponent,
+  //   DisplayRoomsComponent,
+  // },
+  setup() {
+    // init refs
+    const ca_rooms = ref([]);
+    const ca_selectedCapacity = ref(2);
+    const ca_selectedEquipments = ref('');
+    const ca_displayBookedRooms = ref(false);
+    const ca_error = ref('');
+    const ca_isLoading = ref(true);
+    const ca_reservations = ref([]);
+    const ca_range = ref({
+      start: utils.roundDate(new Date(Date.now()), 5),
+      end: utils.roundDate(new Date(Date.now() + (30 * 60 * 1000)), 5)
+    });
+    const ca_masks = { input: 'YYYY-MM-DD h:mm A' };
+    // API calls before mounted
+    onBeforeMount(async () => {
+      console.log("Before mount");
+      try {
+        ca_rooms.value = await RoomService.getRooms();
+        // console.log('onBeforeMount | ca_rooms', ca_rooms);
+        ca_reservations.value = await ReservationService.getReservations(ca_range.value);
+        // console.log('onBeforeMount | ca_reservations', ca_reservations);
+        filterRooms();
+      } catch(err) {
+        ca_error.value = err.message;
+      } finally {
+        ca_isLoading.value = false;
+      }
+    });
+    // computed
+    const getSynthesis = computed(function() {
+      if (getRangeSpan.value === '') {
+        const errorMsg = 'La durée de la réservation doit être supérieure ou égale à 5 minutes';
         return errorMsg;
       }
-      this.setError();
-      let synthesis = `${utils.formatDate(this.range.start)} - ${utils.formatDate(this.range.end)} (${this.duration}) | ${this.capacity} places`;
-      if (this.selectedEquipments != '') {
-        synthesis += ` | équipée de : ${this.selectedEquipments}`;
-      }
+      let synthesis = `${utils.formatDate(ca_range.value.start)} - ${utils.formatDate(ca_range.value.end)} (${getRangeSpan.value}) | ${ca_selectedCapacity.value} places`;
+      synthesis += (ca_selectedEquipments.value !== '') ? ` | équipée de : ${ca_selectedEquipments.value}` : '';
       return synthesis;
-    },
-    duration() {
-      return utils.getDuration(this.range.start, this.range.end);
+    });
+    const getRangeSpan = computed(function() {
+      return utils.getDuration(ca_range.value.start, ca_range.value.end);
+    });
+    // watch
+    watch(ca_range, async () => {
+      ca_isLoading.value = true;
+      if (getRangeSpan.value === '') {
+        setError(getSynthesis.value);
+        Swal.fire('Oops...', getSynthesis.value, 'error');
+        ca_isLoading.value = false;
+      } else {
+        setError();
+        ca_reservations.value = await ReservationService.getReservations(ca_range.value);
+        ca_isLoading.value = false;
+        filterRooms();
+      }
+    }, { immediate: true });
+    watch(ca_selectedEquipments, async () => {
+      filterRooms();
+    }, { immediate: true });
+    // methods
+    function setError(errorMsg) {
+      ca_error.value = errorMsg;
     }
-  },
-  async created() {
-     try {
-        this.rooms = await RoomService.getRooms();
-        console.log('created | this.rooms', this.rooms);
-        this.reservations = await ReservationService.getReservations(this.range);
-        console.log('created | this.reservations', this.reservations);
-        await this.filterRooms();
-     } catch(err) {
-      this.error = err.message;
-     } finally {
-       this.loading = false;
-     }
-  },
-  watch: {
-    async range() {
-      this.loading = true;
-      this.reservations = await ReservationService.getReservations(this.range);
-      this.loading = false;
-      await this.filterRooms();
-    },
-    async selectedEquipments() {
-      await this.filterRooms();
-    },
-  },
-  methods: {
-    setError(errorMsg) {
-      this.error = errorMsg;
-    },
-    checkIfRoomIncludesSelectedEquipments(room) {
-      this.selectedEquipments.split(' ').forEach(selectedEquipement => {
+    function checkIfRoomIncludesSelectedEquipments(room) {
+      ca_selectedEquipments.value.split(' ').forEach(selectedEquipement => {
         room.equipments.forEach(equipement => {
           if (equipement.name.toLowerCase().includes(selectedEquipement.toLowerCase())) {
             room.includesSelectedEquipments = true;
@@ -199,60 +208,71 @@ export default {
           }
         });
       });
-    },
-    async filterRooms() {
-      let roomsToFilter = this.rooms;
-      this.rooms = roomsToFilter.map(function(room) {
+    }
+    function filterRooms() {
+      let roomsToFilter = ca_rooms.value;
+      ca_rooms.value = roomsToFilter.map(function(room) {
           let roomCopy = Object.assign({}, room);
           roomCopy.booked = false;
           roomCopy.includesSelectedEquipments = false;
           return roomCopy;
       });
-      this.rooms.forEach(room => {
-        if (this.selectedEquipments.length) {
-          this.checkIfRoomIncludesSelectedEquipments(room);
+      ca_rooms.value.forEach(room => {
+        if (ca_selectedEquipments.value.length) {
+          checkIfRoomIncludesSelectedEquipments(room);
         }
-        this.reservations.forEach(reservation => {
+        ca_reservations.value.forEach(reservation => {
           if (reservation.room_id === room._id) {
-            if (reservation.start >= this.range.start && reservation.start < this.range.end) {
+            if (reservation.start >= ca_range.value.start && reservation.start < ca_range.value.end) {
               room.booked = true;
               room.bookedInfo = `Réservée le ${reservation.start.getDate()} à partir de ${utils.formatTime(reservation.start)}`;
             } 
-            if (reservation.end > this.range.start && reservation.end <= this.range.end) {
+            if (reservation.end > ca_range.value.start && reservation.end <= ca_range.value.end) {
               room.booked = true;
-              room.bookedInfo = `Réservée le ${reservation.end.getDate()} jusqu'à ${utils.formatTime(reservation.end)}`;
+              room.bookedInfo = `Réservée jusqu'au ${reservation.end.getDate()} à ${utils.formatTime(reservation.end)}`;
             }
           }
         });
       });
-      // console.log('filterRooms | this.rooms', this.rooms);
-    },
-    async createReservation(index) {
-      const room = this.rooms[index];
-      console.log('createReservation(' + index.toString() + ')', room);
+      // console.log('filterRooms | ca_rooms', ca_rooms);
+    }
+    async function createReservation(index) {
+      const room = ca_rooms.value[index];
+      // console.log('createReservation(' + index.toString() + ')', room);
       if (room) {
         room.booked = true;
-        room.bookedInfo = `Réservée le ${this.range.start.getDate()} à partir de ${utils.formatTime(this.range.start)}`;
-        this.$swal(
+        room.bookedInfo = `Réservée le ${ca_range.value.start.getDate()} à partir de ${utils.formatTime(ca_range.value.start)}`;
+        Swal.fire(
           'Réservation enregistrée',
-          `Du ${utils.formatDate(this.range.start)}<br>au ${utils.formatDate(this.range.end)}<br>Durée de ${this.duration}<br>Pour ${this.capacity} places (${room.capacity} au total)`,
+          `Du ${utils.formatDate(ca_range.value.start)}<br>au ${utils.formatDate(ca_range.value.end)}<br>Durée de ${getRangeSpan.value}<br>Pour ${ca_selectedCapacity.value} places (${room.capacity} au total)`,
           'success'
         )
         await ReservationService.insertReservation(
           room,
-          this.range,
-          this.capacity
+          ca_range.value,
+          ca_selectedCapacity.value
           // https://medium.com/swlh/vue3-using-ref-or-reactive-88d47c8f6944
         );
-        this.reservations = await ReservationService.getReservations(this.range);
+        ca_reservations.value = await ReservationService.getReservations(ca_range.value);
       } else {
-        this.$swal(
-          'Oops...',
-          'Impossible de réserver cette salle',
-          'error'
-        )
+        Swal.fire('Oops...', 'Impossible de réserver cette salle', 'error');
       }
     }
+    // end setup
+    return {
+      ca_rooms,
+      ca_selectedCapacity,
+      ca_selectedEquipments,
+      ca_displayBookedRooms,
+      ca_error,
+      ca_isLoading,
+      ca_reservations,
+      ca_range,
+      ca_masks,
+      getSynthesis,
+      getRangeSpan,
+      createReservation
+    };
   }
 }
 </script>

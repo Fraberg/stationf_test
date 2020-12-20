@@ -1,14 +1,12 @@
 const express = require("express");
 const mongodb = require("mongodb");
 require('dotenv').config();
+// import { getCollectionByName } from "../../db/client"; doesn't work 
 
 const router = express.Router();
 
-// get
 router.get("/", async (req, res) => {
-  // console.log('    start:', JSON.parse(req.query.range).start)
-  // console.log('gte start:', new Date(new Date(JSON.parse(req.query.range).start).getTime() + (0 * 60 * 1000)))
-  // console.log('lte   end:', new Date(new Date(JSON.parse(req.query.range).end).getTime() + (0 * 60 * 1000)))
+  // const reservations = await getCollectionByName('reservations');
   const reservations = await loadReservationsCollection();
   res.status(200).send(await reservations.find({
     $or: [
@@ -28,7 +26,6 @@ router.get("/", async (req, res) => {
   }).toArray());
 });
 
-// add
 router.post("/", async (req, res) => {
   const reservations = await loadReservationsCollection();
   await reservations.insertOne({
@@ -43,7 +40,7 @@ router.post("/", async (req, res) => {
   res.status(201).send();
 });
 
-// delete
+// not used at this stage
 router.delete("/:id", async (req, res) => {
   const reservations = await loadReservationsCollection();
   await reservations.deleteOne({
