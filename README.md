@@ -1,5 +1,5 @@
-# testStationF
-> some test that actually is occasion to discover vue 3 ( MEVN stack)
+# Room reservation
+> discovering vue 3 in a MEVN stack by building a simple room reservation app
 
 ## Table of contents
 * [General info](#general-info)

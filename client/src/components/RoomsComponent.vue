@@ -95,6 +95,7 @@ export default {
   setup() {
     // init refs
     const rooms = ref([]);
+    // const filteredRooms = ref([]);
     const selectedCapacity = ref(2);
     const selectedEquipments = ref('');
     const displayBookedRooms = ref(false);
@@ -141,10 +142,9 @@ export default {
         return (room.capacity >= selectedCapacity.value 
           && (!room.booked || displayBookedRooms.value)
           && (!selectedEquipments.value.length || room.includesSelectedEquipments))
-      }).sort(function(a, b) {
-        return a.distance - b.distance;
-      });
+      }).sort(function(a, b) { return a.distance - b.distance; });
     });
+
     // watch functions
     watch(range, async () => {
       if (getRangeSpan.value === 'unvalid') {
@@ -154,20 +154,17 @@ export default {
       }
       error.value = '';
       try {
-        isLoading.value = true;
         reservations.value = await ReservationService.getReservations(range.value);
       } catch (err) {
         error.value = err;
-      } finally {
-        isLoading.value = false;
       }
       filterRooms();
-    }, { immediate: true });
+    }, { immediate: false });
     watch(getSelectedEquipments, () => {
       if (getSelectedEquipments.value.length) {
         filterRooms();
       }
-    }, { immediate: true });
+    }, { immediate: false });
     
     // methods
     function checkIfRoomIncludesSelectedEquipments(room) {
