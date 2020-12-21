@@ -20,23 +20,24 @@ project status is WIP
 
 ## Todo
 - [x] set up boilerplate: node express mongo, vue
-- [x] deploy workflow
-- [x] design db
+- [x] create rooms and reservations routes
 - [x] secure secrets variables
-- [x] basic design
-  - [x] 1 form to query db
+- [x] deploy to heroku once
+- [x] basic front end
+  - [x] 1 form to trigger API calls that query mongodb
   - [x] 1 container to list available rooms
+- [x] code the logic (filter room by datetime/capacity/equipments and book them)
 - [x] switch to composition API
-- [ ] split code between more components (ongoing)
-- [ ] design frontend with some bootstrap-like library
+- [ ] extract component logic into composition functions (ongoing)
+- [x] split code between components (could be done better)
+- [ ] design front end with some bootstrap-like library (have to wait 2021 Q1 for vuetify[*](https://vuetifyjs.com/en/introduction/roadmap/#in-development)/quasar[*](https://github.com/quasarframework/quasar/issues/7836) x Vue 3)
+- [ ] understand/find how to restrict access to server from anything other than the client [*](https://stackoverflow.com/questions/52988248/in-rest-api-how-to-restrict-url-access-from-browser-using-nodejs-expressjs) [**](https://stackoverflow.com/questions/33060044/express-csrf-token-validation/42842943)
 - [ ] lint codebase
-- [ ] Algolia to fasten API calls
-- [ ] use [VeeValidate](https://vee-validate.logaretm.com/v3/) ?
-- [ ] Nuxt.js ?
+- [ ] Algolia / [VeeValidate](https://vee-validate.logaretm.com/v3/) / Nuxt.js ?
 
 ## Setup
-deployed version: https://resa-stationf.herokuapp.com/
-or clone this repo locally, then:
+- deployed version: https://resa-stationf.herokuapp.com/
+- or clone this repo locally, then:
 ```
 npm run dev
 ```
@@ -58,6 +59,9 @@ cd ./client && npm run serve
   - nice [vue 3 tips and tricks](https://www.youtube.com/watch?v=iVnn21cAa3M&list=PLnKfPkeIekbb7X0TqmNNdX-CKOJaYNTpu&index=11), on vs code extensions, error-handling
   - full Stack Vue.js, Express & MongoDB Traversy Media [playlist](https://www.youtube.com/watch?v=j55fHUJqtyw&list=PLillGF-RfqbYSx-Ab1xWVanGKtowTsnNm)
   - composition API [yt video](https://www.youtube.com/watch?v=bwItFdPt-6M)
+  - shared state management with Composition API
+    - [the idea](https://vueschool.io/articles/vuejs-tutorials/state-management-with-composition-api/)
+    - [some good example with provide/inject](https://dev.to/nonso/shared-state-management-with-vue-composition-api-2938) + [code](https://codesandbox.io/s/global-data-management-with-composition-api-kikyi?from-embed=&file=/src/App.vue)
   lifecycle hooks:
     - beforeMount - Right before mounting of the DOM begins
     - mounted - Called when the instance has been mounted (browser updated).

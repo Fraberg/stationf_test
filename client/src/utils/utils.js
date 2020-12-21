@@ -18,17 +18,25 @@ function formatTime (date) {
 }
 
 /**
- * formatDate
+ * formatLiteralDate
  * @param {*} date 
  */
-function formatDate (date) {
+function formatNumericDate (date) {
+    return `${pad(date.getDate(), 2)}/${date.getMonth()}/${date.getFullYear()} ${formatTime(date)}`;
+}
+
+/**
+ * formatLiteralDate
+ * @param {*} date 
+ */
+function formatLiteralDate (date) {
     let days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
     let months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
     return `${days[date.getDay()]} ${pad(date.getDate(), 2)} ${months[date.getMonth()]} ${date.getFullYear()} ${formatTime(date)}`;
 }
 
 /**
- * formatDate
+ * getRoundedDate
  * @param {*} minutes 
  * @param {*} d 
  */
@@ -63,7 +71,7 @@ function getDuration (start, end) {
     const diffHrs = Math.floor((diffMs % 86400000) / 3600000);
     const diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
     if (diffDays === 0 && diffHrs === 0 && diffMins === 0) {
-        return '';
+        return 'unvalid';
     }
     let duration = "";
     if (diffDays > 0) {
@@ -101,7 +109,8 @@ function dateIsInRange(date, start, end) {
 
 module.exports = {
     formatTime,
-    formatDate,
+    formatNumericDate,
+    formatLiteralDate,
     roundDate,
     getDuration,
     getUniqueCharactersIn,

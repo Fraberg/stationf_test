@@ -1,17 +1,17 @@
 <template>
   <div>
     <!-- <TestComponent/> -->
-    <RoomComponent/>
+    <RoomsComponent/>
   </div>
 </template>
 
 <script>
-import RoomComponent from './components/RoomComponent.vue';
+import RoomsComponent from './components/RoomsComponent.vue';
 
 export default {
   name: 'App',
   components: {
-    RoomComponent
+    RoomsComponent
   }
 }
 </script>

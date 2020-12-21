@@ -28,7 +28,7 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const reservations = await loadReservationsCollection();
-  await reservations.insertOne({
+  const insertion = await reservations.insertOne({
     user_id: req.body.user_id,
     room_id: req.body.room_id,
     start: new Date(req.body.start),
@@ -37,7 +37,9 @@ router.post("/", async (req, res) => {
     createdAt: new Date(),
     updatedAt: new Date()
   });
-  res.status(201).send();
+  let data = {};
+  if (insertion.acknowledged) data = await reservations.findOne({_id: insertion.insertedId});
+  res.status(201).send(data);
 });
 
 // not used at this stage
