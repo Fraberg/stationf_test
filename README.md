@@ -45,6 +45,10 @@ in another shell tab
 ```
 cd ./client && npm run serve
 ```
+seed rooms / clear reservations
+```
+node seed/seed.js
+```
 
 ## Nice ressources
 <details><summary>(click to toggle)</summary>

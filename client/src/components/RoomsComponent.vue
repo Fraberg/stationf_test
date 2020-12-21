@@ -55,10 +55,6 @@
             <p class="display-if-booked">Afficher les salles réservées</p>
             <input type="checkbox" v-model="displayBookedRooms">
           </div>
-          <!-- submit -->
-          <!-- <div class="submit">
-            <button>FILTRER</button>
-          </div> -->
         </div>
       </form>
     </div>
@@ -74,6 +70,15 @@
       :error="error"
     >
     </RoomsListComponent>
+    <!-- CLEAR -->
+    <div class="delete-reservations">
+      <button
+        @click="deleteReservations"
+        v-show="reservations.length"
+      >
+        Supprimer les réservations
+      </button>
+    </div>
   </div>
 </template>
 
@@ -156,6 +161,7 @@ export default {
       try {
         reservations.value = await ReservationService.getReservations(range.value);
       } catch (err) {
+        Swal.fire('Oops...', err, 'error');
         error.value = err;
       }
       filterRooms();
@@ -219,18 +225,35 @@ export default {
       )
       try {
         isLoading.value = true;
-        const insertedReservation = await ReservationService.insertReservation(room, range.value, selectedCapacity.value);
-        if (!(Object.keys(insertedReservation).length === 0 && insertedReservation.constructor === Object)) {
-          reservations.value.push(insertedReservation);
-        }
+        /* const insertedReservation =*/ await ReservationService.insertReservation(room, range.value, selectedCapacity.value);
+        // reservations.value.push(insertedReservation);
+        reservations.value = await ReservationService.getReservations(range.value);
       } catch (err) {
+        Swal.fire('Oops...', `Erreur lors de l'enregistrement de cette réservation ${err}`, 'error');
         error.value = err;
       } finally {
         isLoading.value = false;
       }
     }
+    async function deleteReservations() {
+        try {
+          const ids = reservations.value.map(reservation => reservation._id);
+          reservations.value = [];
+          filterRooms();
+          // isLoading.value = true;
+          for (const id of ids) {
+            await ReservationService.deleteReservation(id);
+          }
+          Swal.fire('Réservations supprimées', 'Pour la période sélectionnée', 'success');
+        } catch (err) {
+          Swal.fire('Oops...', `Erreur lors de la suppression de cette réservation ${err}`, 'error');
+          error.value = err;
+        } /* finally {
+          isLoading.value = false;
+        } */
+    }
 
-    // end setup
+    // end setup => return
     return {
       rooms,
       selectedCapacity,
@@ -244,7 +267,8 @@ export default {
       getSynthesis,
       getRangeSpan,
       filteredRooms,
-      createReservation
+      createReservation,
+      deleteReservations
     };
   }
 }
@@ -318,5 +342,8 @@ form {
 }
 .filters-synthesis {
   margin: 5 0px;
+}
+.delete-reservations {
+  margin-top: 50px;
 }
 </style>

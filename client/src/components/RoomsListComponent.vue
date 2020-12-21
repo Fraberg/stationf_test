@@ -11,7 +11,7 @@
     <hr>
     <!-- LIST -->
     <div v-if="isLoading" class="loading">
-      <h2>Chargement des salles ...</h2>
+      <h2>Chargement ... :)</h2>
     </div>
     <div v-else-if="error" class="error">
       <p>{{ error }}</p>
