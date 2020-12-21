@@ -90,22 +90,20 @@ export default {
   --var-lightgrey: #f1f1f1;
   --var-stationfpink: #ff00ae;
 }
-hr {
-  width: 100%;
-  color: var(--var-color-3);
-}
 /* list headers */
 .list-headers {
   display: flex;
   margin: 10px 0px 10px 0px;
-  padding: 10px;
+  padding: 10px 0px 10px 0px;
   border-radius: 4px;
   font-weight: bold;
-  background-color: var(--var-stationfpink);
 }
 .list-headers > p {
   margin: 5px;
-  color: var(--var-white);
+  padding: 5px 0px 5px 0px;
+  border-radius: 4px;
+  color: var(--var-black);
+  background-color: var(--var-white);
   font-weight: bold;
 }
 .list-headers > .name {
@@ -135,7 +133,7 @@ hr {
   margin-bottom: 10px;
   border-radius: 4px;
   background: var(--var-white);
-  box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
 }
 .room:hover {
    background-color: var(--var-lightgrey);

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <h1 class="title">🏬 Réserver une salle 🏬</h1>
     <!-- FORM -->
+    <h1 class="title">Réserver une salle à Station F 🏬</h1>
     <div class="form-border">
       <!-- <div class="wrapper"> -->
         <div class="form-container">
@@ -155,8 +155,8 @@ export default {
         const errorMsg = 'La durée de la réservation doit être >= à 5 minutes';
         return errorMsg;
       }
-      let synthesis = `< ${utils.formatLiteralDate(range.value.start)} - ${utils.formatLiteralDate(range.value.end)} (${getRangeSpan.value}) | ${selectedCapacity.value} place${selectedCapacity.value > 1 ? 's' : ''}`;
-      synthesis += (getSelectedEquipments.value !== '') ? ` | équipée de : "${selectedEquipments.value}" >` : ' >';
+      let synthesis = `{ ${utils.formatLiteralDate(range.value.start)} - ${utils.formatLiteralDate(range.value.end)} (${getRangeSpan.value}) | ${selectedCapacity.value} place${selectedCapacity.value > 1 ? 's' : ''}`;
+      synthesis += (getSelectedEquipments.value !== '') ? ` | équipée de : "${selectedEquipments.value}" }` : ' }';
       return synthesis;
     });
     const getRangeSpan = computed(function() {
@@ -390,6 +390,7 @@ p.label {
 .synthesis {
   padding: 10px;
   margin: 0px;
+  font-size: 14px;
 }
 .delete-reservations {
   margin-top: 50px;
