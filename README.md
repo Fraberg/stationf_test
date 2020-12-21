@@ -74,7 +74,7 @@ node seed/seed.js
     - updated - Called when reactive data has changed, and the DOM has been re-rendered.
     - beforeDestroy - Called right before the Vue instance is destroyed.
     - destroyed - Called after the Vue instance has been destroyed.
-- other hooks:
+  - other hooks:
     - activated - Used for , when a component inside is toggled on.
     - deactivated - Used for , when a component inside is toggled off.
     - errorCaptured - Called when an error from any descendent component is captured.

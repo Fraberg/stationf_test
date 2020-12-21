@@ -193,7 +193,7 @@ export default {
           if (reservation.start >= range.value.start && reservation.start < range.value.end
           || reservation.end > range.value.start && reservation.end <= range.value.end) {
             room.booked = true;
-            room.bookedInfo = `Réservée du ${utils.formatNumericDate(range.value.start)} au ${utils.formatNumericDate(range.value.end)}`;
+            room.bookedInfo = `Réservée du ${utils.formatNumericDate(reservation.start)} au ${utils.formatNumericDate(reservation.end)}`;
             return;
           } 
         }
@@ -220,7 +220,7 @@ export default {
       try {
         // isLoading.value = true;
         room.booked = true;
-        room.bookedInfo = `Réservée du ${utils.formatNumericDate(range.value.start)} au ${utils.formatNumericDate(range.value.end)}`;
+        // room.bookedInfo = `Réservée du ${utils.formatNumericDate(range.value.start)} au ${utils.formatNumericDate(range.value.end)}`;
         Swal.fire({
           title: 'Réservation enregistrée',
           html: `Du <b>${utils.formatLiteralDate(range.value.start)}</b><br>au <b>${utils.formatLiteralDate(range.value.end)}</b><br>Durée de <b>${getRangeSpan.value}</b><br>Capacité : ${room.capacity} places au total`,
@@ -229,6 +229,7 @@ export default {
         /* const insertedReservation =*/ await ReservationService.insertReservation(room, range.value, selectedCapacity.value);
         // reservations.value.push(insertedReservation);
         reservations.value = await ReservationService.getReservations(range.value);
+        filterRooms();
       } catch (err) {
         Swal.fire('Oops...', `Erreur lors de l'enregistrement de cette réservation ${err}`, 'error');
         error.value = err;
