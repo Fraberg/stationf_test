@@ -7,15 +7,15 @@
       <p class="capacity">CAPACITÉ</p>
       <p class="description">DESCRIPTION</p>
       <p class="equipments">ÈQUIPEMENTS</p>
-      <p class="reservation">RÈSERVATION</p>
+      <p class="reservation">RÉSERVATION</p>
     </div>
 
     <!-- LIST -->
     <div v-if="isLoading" class="loading">
-      <h2>Chargement ... :)</h2>
+      <h2>Chargement des salles disponibles ... ⏱️</h2>
     </div>
     <div v-else-if="error" class="error">
-      <p>{{ error }}</p>
+      <h2>🤷 {{ error }}</h2>
     </div>
     <div class="room"
       v-else
@@ -41,7 +41,7 @@
         </li>
       </ul>
       <div class="reservation">
-        <button v-if="!room.booked" @click="createReservation(index)">
+        <button v-if="!room.booked" @click="createReservation(room._id)">
           <!-- <font-awesome-icon :icon="['fa', 'bookmark']" /> -->
           Réserver
         </button>
@@ -68,8 +68,8 @@ export default {
     //   }
     // });
     // methods
-    function createReservation(index) {
-      context.emit("create-reservation", index);
+    function createReservation(id) {
+      context.emit("create-reservation", id);
     }
     return { createReservation };
   }
@@ -123,8 +123,14 @@ export default {
 }
 /* list content */
 .loading > h2 {
-  color: var(--var-color-1);
   font-weight: bold;
+  padding: 0.5rem 1.75rem 0.50rem 1.75rem;
+  color: var(--var-white);
+}
+.error > h2 {
+  font-weight: bold;
+  padding: 0.5rem 1.75rem 0.50rem 1.75rem;
+  color: var(--var-white);
 }
 .room {
   display: flex;

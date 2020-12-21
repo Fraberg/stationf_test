@@ -230,8 +230,8 @@ export default {
         checkIfRoomIncludesSelectedEquipments(room);
       });
     }
-    async function createReservation(index) {
-      const room = rooms.value[index];
+    async function createReservation(id) {
+      const room = rooms.value.find(room => room._id === id);
       if (!room) {
         Swal.fire('Oops...', 'Erreur lors de l\'enregistrement de cette réservation', 'error');
         return;
@@ -393,7 +393,7 @@ p.label {
   font-size: 14px;
 }
 .delete-reservations {
-  margin-top: 50px;
+  margin-top: 20px;
 }
 .delete-reservations > button {
   color: var(--var-stationfpink);

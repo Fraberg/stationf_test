@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <RoomsComponent/>
-  </div>
+  <RoomsComponent/>
 </template>
 
 <script>
@@ -27,7 +25,7 @@ body {
   font-size: 12px;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 15px;
 }
 .swal2-title {
     font-family: Avenir, Helvetica, Arial,sans-serif !important;
