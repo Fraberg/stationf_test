@@ -38,7 +38,7 @@ project status is WIP
 - [ ] [Algolia](https://codesandbox.io/embed/github/algolia/doc-code-samples/tree/master/Vue+InstantSearch/getting-started) / [VeeValidate](https://vee-validate.logaretm.com/v3/) / Nuxt.js ?
 
 ## Setup
-- deployed version: https://resa-stationf.herokuapp.com/
+- deployed version: https://reservation-stationf.herokuapp.com/
 - or clone this repo locally, then:
 ```
 npm run dev
