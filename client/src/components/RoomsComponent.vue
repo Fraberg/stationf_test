@@ -224,16 +224,16 @@ export default {
         'success'
       )
       try {
-        isLoading.value = true;
+        // isLoading.value = true;
         /* const insertedReservation =*/ await ReservationService.insertReservation(room, range.value, selectedCapacity.value);
         // reservations.value.push(insertedReservation);
         reservations.value = await ReservationService.getReservations(range.value);
       } catch (err) {
         Swal.fire('Oops...', `Erreur lors de l'enregistrement de cette réservation ${err}`, 'error');
         error.value = err;
-      } finally {
+      } /* finally {
         isLoading.value = false;
-      }
+      } */
     }
     async function deleteReservations() {
         try {
