@@ -213,18 +213,18 @@ export default {
     async function createReservation(index) {
       const room = rooms.value[index];
       if (!room) {
-        Swal.fire('Oops...', 'Impossible de réserver cette salle', 'error');
+        Swal.fire('Oops...', 'Erreur lors de l\'enregistrement de cette réservation', 'error');
         return;
       }
-      room.booked = true;
-      room.bookedInfo = `Réservée du ${utils.formatNumericDate(range.value.start)} au ${utils.formatNumericDate(range.value.end)}`;
-      Swal.fire(
-        'Réservation enregistrée',
-        `Du ${utils.formatLiteralDate(range.value.start)}<br>au ${utils.formatLiteralDate(range.value.end)}<br>Durée de ${getRangeSpan.value}<br>Capacité : ${room.capacity} places au total`,
-        'success'
-      )
       try {
         // isLoading.value = true;
+        room.booked = true;
+        room.bookedInfo = `Réservée du ${utils.formatNumericDate(range.value.start)} au ${utils.formatNumericDate(range.value.end)}`;
+        Swal.fire({
+          title: 'Réservation enregistrée',
+          html: `Du <b>${utils.formatLiteralDate(range.value.start)}</b><br>au <b>${utils.formatLiteralDate(range.value.end)}</b><br>Durée de <b>${getRangeSpan.value}</b><br>Capacité : ${room.capacity} places au total`,
+          icon: 'success'
+        })
         /* const insertedReservation =*/ await ReservationService.insertReservation(room, range.value, selectedCapacity.value);
         // reservations.value.push(insertedReservation);
         reservations.value = await ReservationService.getReservations(range.value);
@@ -238,13 +238,13 @@ export default {
     async function deleteReservations() {
         try {
           const ids = reservations.value.map(reservation => reservation._id);
+          Swal.fire('Réservations supprimées', 'Pour la période sélectionnée', 'success');
           reservations.value = [];
           filterRooms();
           // isLoading.value = true;
           for (const id of ids) {
             await ReservationService.deleteReservation(id);
           }
-          Swal.fire('Réservations supprimées', 'Pour la période sélectionnée', 'success');
         } catch (err) {
           Swal.fire('Oops...', `Erreur lors de la suppression de cette réservation ${err}`, 'error');
           error.value = err;
