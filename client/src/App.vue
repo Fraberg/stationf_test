@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <TestComponent/> -->
     <RoomsComponent/>
   </div>
 </template>

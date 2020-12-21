@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <h1 class="title">🏬 Réserver une salle 🏬</h1>
     <!-- FORM -->
     <div class="form-border">
       <!-- <div class="wrapper"> -->
@@ -307,6 +308,10 @@ export default {
   display: flex;
   flex-direction: column;
 }
+.title {
+  color: var(--var-white);
+  margin: 0px 0px 10px 0px;
+}
 /* form */
 .form-border {
   background-image: linear-gradient(135deg, #fff000 25%, #ff00ae 25%, #ff00ae 50%, #fff000 50%, #fff000 75%, #ff00ae 75%, #ff00ae 100%);
@@ -327,7 +332,7 @@ input {
   padding: 4px;
 }
 p.label {
-  margin: 10 0 10 0px;
+  margin: 10px 0px 10px 0px;
   font-size: 13px;
   font-weight: bold;
 }

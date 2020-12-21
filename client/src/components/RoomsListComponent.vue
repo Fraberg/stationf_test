@@ -26,7 +26,7 @@
     >
       <p class="name">{{ room.name }}</p>
       <p class="capacity">
-        <font-awesome-icon :icon="['fa', room.capacity > 5 ? (room.capacity > 15 ? 'users' : 'user-friends') : 'user-friends']" />
+        <font-awesome-icon :icon="['fa', room.capacity > 5 ? (room.capacity > 15 ? 'users' : 'user-friends') : 'user-alt']" />
         {{ room.capacity }}
       </p>
       <p class="description">{{ room.description }}</p>
