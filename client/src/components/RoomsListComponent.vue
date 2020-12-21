@@ -1,14 +1,15 @@
 <template>
   <div class="rooms-container">
+
     <!-- HEADERS -->
     <div class="list-headers">
-      <p class="name">Nom</p>
-      <p class="capacity">Capacité</p>
-      <p class="description">Description</p>
-      <p class="equipments">Équipements</p>
-      <p class="reservation">Réservation</p>
+      <p class="name">NOM</p>
+      <p class="capacity">CAPACITÉ</p>
+      <p class="description">DESCRIPTION</p>
+      <p class="equipments">ÈQUIPEMENTS</p>
+      <p class="reservation">RÈSERVATION</p>
     </div>
-    <hr>
+
     <!-- LIST -->
     <div v-if="isLoading" class="loading">
       <h2>Chargement ... :)</h2>
@@ -24,7 +25,10 @@
       v-bind:key="room._id"
     >
       <p class="name">{{ room.name }}</p>
-      <p class="capacity">{{ room.capacity }}</p>
+      <p class="capacity">
+        <font-awesome-icon :icon="['fa', room.capacity > 5 ? (room.capacity > 15 ? 'users' : 'user-friends') : 'user-friends']" />
+        {{ room.capacity }}
+      </p>
       <p class="description">{{ room.description }}</p>
       <ul class="equipments">
         <li class="name"
@@ -38,7 +42,7 @@
       </ul>
       <div class="reservation">
         <button v-if="!room.booked" @click="createReservation(index)">
-          <font-awesome-icon :icon="['fa', 'bookmark']" />
+          <!-- <font-awesome-icon :icon="['fa', 'bookmark']" /> -->
           Réserver
         </button>
         <p v-if="!room.booked">pour {{ getRangeSpan }}</p>
@@ -49,15 +53,25 @@
 </template>
 
 <script>
+// import { onBeforeMount } from 'vue';
+
 export default {
   name: 'RoomsListComponent',
-  props: ["rooms", "getRangeSpan", "isLoading", "error"],
-  emits: ["create-reservation"],
+  props: ['rooms', 'getRangeSpan', 'isLoading', 'error'],
+  emits: ['create-reservation'],
   setup(_, context) {
+    // lifecycle
+    // onBeforeMount(async () => {
+    //   while (props.isLoading.value === false) {
+    //     console.log("a");
+    //     await null; // prevents app from hanging
+    //   }
+    // });
+    // methods
     function createReservation(index) {
       context.emit("create-reservation", index);
     }
-  return { createReservation };
+    return { createReservation };
   }
 }
 </script>
@@ -70,16 +84,29 @@ export default {
   --var-description-width: 0 0 15%;
   --var-equipments-width: 1;
   --var-reservation-width: 0 0 18%;
+  --var-black: #000;
+  --var-white: #fff;
+  --var-grey: #a0a0a0;
+  --var-lightgrey: #f1f1f1;
+  --var-stationfpink: #ff00ae;
+}
+hr {
+  width: 100%;
+  color: var(--var-color-3);
 }
 /* list headers */
 .list-headers {
   display: flex;
+  margin: 10px 0px 10px 0px;
   padding: 10px;
-  color: var(--var-color-1);
+  border-radius: 4px;
   font-weight: bold;
+  background-color: var(--var-stationfpink);
 }
 .list-headers > p {
   margin: 5px;
+  color: var(--var-white);
+  font-weight: bold;
 }
 .list-headers > .name {
   flex: var(--var-name-width);
@@ -105,15 +132,17 @@ export default {
   display: flex;
   margin: 0 10 10 10px;
   padding: 10px;
-  border-bottom: solid 0.1em;
-  border-bottom-color: var(--var-color-2);
+  margin-bottom: 10px;
+  border-radius: 4px;
+  background: var(--var-white);
+  box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.15);
 }
 .room:hover {
-   background-color: var(--var-color-2);
+   background-color: var(--var-lightgrey);
 }
 .room > p {
   margin: 0 5px;
-  line-height: 38px;
+  line-height: 50px;
 }
 .room > li {
   margin: 0 5px;
@@ -135,6 +164,7 @@ export default {
   align-items: center;
   list-style: none;
   margin: 0px;
+  padding: 0px;
 }
 .room > .equipments > li {
   margin: 0 10px;
@@ -142,7 +172,23 @@ export default {
 .room > .reservation {
   flex: var(--var-reservation-width);
 }
+.room > .reservation > button {
+  color: var(--var-stationfpink);
+  padding: 0.5rem 1.75rem 0.50rem 1.75rem;
+  border: 1px solid var(--var-stationfpink);
+  background: var(--var-white);
+  font-weight: bold;
+}
+.room > .reservation > button:hover {
+  color: var(--var-white);
+  padding: 0.5rem 1.75rem 0.50rem 1.75rem;
+  border: 1px solid var(--var-stationfpink);
+  background: var(--var-stationfpink);
+  font-weight: bold;
+}
 .room > .reservation > p {
+  padding-top: 3px;
   margin: 0px;
+  color: var(--var-grey);
 }
 </style>

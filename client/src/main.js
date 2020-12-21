@@ -1,11 +1,25 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import VCalendar from 'v-calendar';
+import {
+  faTrashAlt,
+  faBookmark,
+  faSearch,
+  faUserAlt,
+  faUserFriends,
+  faUsers
+} from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faTrashAlt, faBookmark, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-library.add(faTrashAlt, faBookmark, faSearch);
+library.add(
+  faTrashAlt,
+  faBookmark,
+  faSearch,
+  faUserAlt,
+  faUserFriends,
+  faUsers
+);
 
 createApp(App)
   // Use the plugin with optional defaults

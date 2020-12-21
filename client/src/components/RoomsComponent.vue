@@ -1,78 +1,94 @@
 <template>
   <div class="container">
     <!-- FORM -->
-    <div class="form-container">
-      <form class="bg-white shadow-md rounded px-8 pt-6 pb-8" @submit.prevent="">
-        <div class="mb-4">
-          <!-- date range picker -->
-          <v-date-picker
-            v-model="range"
-            mode="dateTime"
-            :masks="masks"
-            is-range
-            :min-date='new Date().setHours(0,0,0,0)'
-            :minute-increment="5"
-          >
-            <template v-slot="{ inputValue, inputEvents, isDragging }">
-              <div class="datepicker-subtemplate flex flex-col sm:flex-row justify-start items-center">
-                <!-- start datetime -->
-                <div class="date-picker-input-wrapper relative flex-grow">
-                  <p class="label-input">Début</p>
-                  <input
-                    class="flex-grow pl-8 pr-2 py-1 bg-gray-100 border rounded w-full"
-                    :class="isDragging ? 'text-gray-600' : 'text-gray-900'"
-                    :value="inputValue.start"
-                    v-on="inputEvents.start"
-                  />
-                </div>
-                <span class="flex-shrink-0 m-2">
-                </span>
-                <!-- end datetime -->
-                <div class="date-picker-input-wrapper relative flex-grow">
-                  <p class="label-input">Fin</p>
-                  <input
-                    class="flex-grow pl-8 pr-2 py-1 bg-gray-100 border rounded w-full"
-                    :class="isDragging ? 'text-gray-600' : 'text-gray-900'"
-                    :value="inputValue.end"
-                    v-on="inputEvents.end"
-                  />
-                </div>
+    <div class="form-border">
+      <!-- <div class="wrapper"> -->
+        <div class="form-container">
+          <form class="bg-white shadow-md rounded px-8 pt-6 pb-8" @submit.prevent="">
+            <div class="mb-4">
+              <!-- date range picker -->
+              <v-date-picker
+                v-model="range"
+                mode="dateTime"
+                :masks="masks"
+                is-range
+                :min-date='new Date().setHours(0,0,0,0)'
+                :minute-increment="5"
+                color="pink"
+              >
+                <template v-slot="{ inputValue, inputEvents, isDragging }">
+                  <div class="datepicker-subtemplate flex flex-col sm:flex-row justify-start items-center">
+                    <!-- start datetime -->
+                    <div class="date-picker-input-wrapper relative flex-grow">
+                      <p class="label input">Début</p>
+                      <input
+                        class="flex-grow pl-8 pr-2 py-1 bg-gray-100 border rounded w-full"
+                        :class="isDragging ? 'text-gray-600' : 'text-gray-900'"
+                        :value="inputValue.start"
+                        v-on="inputEvents.start"
+                      />
+                    </div>
+                    <span class="flex-shrink-0 m-2">
+                    </span>
+                    <!-- end datetime -->
+                    <div class="date-picker-input-wrapper relative flex-grow">
+                      <p class="label input">Fin</p>
+                      <input
+                        class="flex-grow pl-8 pr-2 py-1 bg-gray-100 border rounded w-full"
+                        :class="isDragging ? 'text-gray-600' : 'text-gray-900'"
+                        :value="inputValue.end"
+                        v-on="inputEvents.end"
+                      />
+                    </div>
+                  </div>
+                </template>
+              </v-date-picker>
+              <!-- capacity -->
+              <div class="capacity">
+                <p class="label capacity">Capacité</p>
+                <input v-model="selectedCapacity" type="number" step="1" min="1" required="true"/>
               </div>
-            </template>
-          </v-date-picker>
-          <!-- capacity -->
-          <div class="capacity">
-            <p class="label-capacity">Capacité</p>
-            <input v-model="selectedCapacity" type="number" step="1" min="1" required="true"/>
-          </div>
-          <!-- equipments -->
-          <div class="equipments">
-            <p class="label-equipments">Équipements</p>
-            <input v-model="selectedEquipments" placeholder="TV, Retro ..."/>
-          </div>
-          <!-- afficher les salles réservées -->
-          <div class="label-display-if-booked">
-            <p class="display-if-booked">Afficher les salles réservées</p>
-            <input type="checkbox" v-model="displayBookedRooms">
-          </div>
+              <!-- equipments -->
+              <div class="equipments">
+                <p class="label equipments">Équipements</p>
+                <input v-model="selectedEquipments" placeholder="TV, Retro ..."/>
+              </div>
+              <!-- afficher les salles réservées -->
+              <div class="display-if-booked">
+                <p class="label display-if-booked">Afficher les salles réservées</p>
+                <input type="checkbox" v-model="displayBookedRooms">
+              </div>
+            </div>
+          </form>
+
         </div>
-      </form>
+        <div class="synthesis-container">
+          <!-- FORM SYNTHESIS -->
+          <p class="synthesis">
+            <font-awesome-icon :icon="['fa', 'search']" />
+            {{ getSynthesis }}
+          </p>
+        </div>
+      <!-- </div> -->
     </div>
-    <!-- FORM SYNTHESIS -->
-    <p class="filters-synthesis">
-      <font-awesome-icon :icon="['fa', 'search']" />
-      {{ getSynthesis }}
-    </p>
-    <hr>
-    <!-- ROOMS -->
-    <RoomsListComponent
-      :rooms="filteredRooms"
-      @create-reservation="createReservation"
-      :getRangeSpan="getRangeSpan"
-      :isLoading="isLoading"
-      :error="error"
-    >
-    </RoomsListComponent>
+
+    <!-- <Suspense>
+      <template #default> -->
+        <!-- ROOMS -->
+        <RoomsListComponent
+          :rooms="filteredRooms"
+          @create-reservation="createReservation"
+          :getRangeSpan="getRangeSpan"
+          :isLoading="isLoading"
+          :error="error"
+        >
+        </RoomsListComponent>
+      <!-- </template>
+      <template #fallback>
+        Loading...
+      </template>
+    </Suspense> -->
+
     <!-- CLEAR -->
     <div class="delete-reservations">
       <button
@@ -139,7 +155,7 @@ export default {
         return errorMsg;
       }
       let synthesis = `< ${utils.formatLiteralDate(range.value.start)} - ${utils.formatLiteralDate(range.value.end)} (${getRangeSpan.value}) | ${selectedCapacity.value} place${selectedCapacity.value > 1 ? 's' : ''}`;
-      synthesis += (getSelectedEquipments.value !== '') ? ` | équipée de : ${selectedEquipments.value} >` : ' >';
+      synthesis += (getSelectedEquipments.value !== '') ? ` | équipée de : "${selectedEquipments.value}" >` : ' >';
       return synthesis;
     });
     const getRangeSpan = computed(function() {
@@ -281,23 +297,39 @@ export default {
 <style scoped>
 /* --- general */
 * {
-  --var-color-1: #669cd3;
-  --var-color-2: #ededed;
+  --var-black: #000;
+  --var-white: #fff;
+  --var-grey: #a0a0a0;
+  --var-lightgrey: #f1f1f1;
+  --var-stationfpink: #ff00ae;
 }
 .container {
   display: flex;
   flex-direction: column;
 }
-hr {
-  width: 100%;
-}
 /* form */
+.form-border {
+  background-image: linear-gradient(135deg, #fff000 25%, #ff00ae 25%, #ff00ae 50%, #fff000 50%, #fff000 75%, #ff00ae 75%, #ff00ae 100%);
+  background-size: 28.28px 28.28px;
+  padding: 8px;
+}
 .form-container {
   display: flex;
   justify-content: space-around;
+  background-color: var(--var-black);
+  color: var(--var-white);
+  margin: 0px;
 }
 form {
   margin-bottom: 10px;
+}
+input {
+  padding: 4px;
+}
+p.label {
+  margin: 10 0 10 0px;
+  font-size: 13px;
+  font-weight: bold;
 }
 .mb-4 {
   display: flex;
@@ -313,10 +345,11 @@ form {
 .date-picker-input-wrapper > input {
   width: 100%;
   text-align: center;
+  /* border-color: var(--var-color-3); */
 }
 .capacity {
   padding: 0 10px;
-  width: 100px;
+  width: 120px;
 }
 .capacity > input {
   width: 100%;
@@ -324,7 +357,7 @@ form {
 }
 .equipments {
   padding: 0 10px;
-  width: 100px;
+  width: 120px;
 }
 .equipments > input {
   width: 100%;
@@ -332,7 +365,7 @@ form {
 }
 .display-if-booked {
   padding: 0 10px;
-  width: 150px;
+  width: 170px;
 }
 .display-if-booked > input {
   width: 100%;
@@ -344,10 +377,30 @@ form {
   justify-content: space-around;
   align-items: center;
 }
-.filters-synthesis {
-  margin: 5 0px;
+.synthesis-container {
+  background-color: var(--var-black);
+  color: var(--var-white);
+  margin: 0px;
+}
+.synthesis {
+  padding: 10px;
+  margin: 0px;
 }
 .delete-reservations {
   margin-top: 50px;
+}
+.delete-reservations > button {
+  color: var(--var-stationfpink);
+  padding: 0.5rem 1.75rem 0.50rem 1.75rem;
+  border: 1px solid var(--var-stationfpink);
+  background: var(--var-white);
+  font-weight: bold;
+}
+.delete-reservations > button:hover {
+  color: var(--var-white);
+  padding: 0.5rem 1.75rem 0.50rem 1.75rem;
+  border: 1px solid var(--var-stationfpink);
+  background: var(--var-stationfpink);
+  font-weight: bold;
 }
 </style>
