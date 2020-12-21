@@ -77,6 +77,7 @@
         v-show="reservations.length"
       >
         Supprimer les réservations
+        <font-awesome-icon :icon="['fa', 'trash-alt']" />
       </button>
     </div>
   </div>

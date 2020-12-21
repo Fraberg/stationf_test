@@ -28,12 +28,13 @@ project status is WIP
   - [x] 1 container to list available rooms
 - [x] code the logic (filter room by datetime/capacity/equipments and book them)
 - [x] switch to composition API
-- [ ] extract component logic into composition functions (ongoing)
-- [x] split code between components (could be done better)
+- [ ] extract component logic into composition functions (usefull ?)
+- [x] split code between components
 - [ ] design front end with some bootstrap-like library (have to wait 2021 Q1 for vuetify[*](https://vuetifyjs.com/en/introduction/roadmap/#in-development)/quasar[*](https://github.com/quasarframework/quasar/issues/7836) x Vue 3)
+- [ ] responsive design
 - [ ] understand/find how to restrict access to server from anything other than the client [*](https://stackoverflow.com/questions/52988248/in-rest-api-how-to-restrict-url-access-from-browser-using-nodejs-expressjs) [**](https://stackoverflow.com/questions/33060044/express-csrf-token-validation/42842943)
 - [ ] lint codebase
-- [ ] Algolia / [VeeValidate](https://vee-validate.logaretm.com/v3/) / Nuxt.js ?
+- [ ] [Algolia](https://codesandbox.io/embed/github/algolia/doc-code-samples/tree/master/Vue+InstantSearch/getting-started) / [VeeValidate](https://vee-validate.logaretm.com/v3/) / Nuxt.js ?
 
 ## Setup
 - deployed version: https://resa-stationf.herokuapp.com/
