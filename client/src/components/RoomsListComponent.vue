@@ -38,7 +38,7 @@
       </ul>
       <div class="reservation">
         <button v-if="!room.booked" @click="createReservation(index)">
-          <font-awesome-icon :icon="['fa', 'plus']" />
+          <font-awesome-icon :icon="['fa', 'bookmark']" />
           Réserver
         </button>
         <p v-if="!room.booked">pour {{ getRangeSpan }}</p>

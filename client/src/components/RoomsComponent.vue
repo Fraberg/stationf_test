@@ -59,7 +59,10 @@
       </form>
     </div>
     <!-- FORM SYNTHESIS -->
-    <p class="filters-synthesis">{{ getSynthesis }}</p>
+    <p class="filters-synthesis">
+      <font-awesome-icon :icon="['fa', 'search']" />
+      {{ getSynthesis }}
+    </p>
     <hr>
     <!-- ROOMS -->
     <RoomsListComponent
@@ -101,7 +104,6 @@ export default {
   setup() {
     // init refs
     const rooms = ref([]);
-    // const filteredRooms = ref([]);
     const selectedCapacity = ref(2);
     const selectedEquipments = ref('');
     const displayBookedRooms = ref(false);
