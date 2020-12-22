@@ -6,7 +6,7 @@
       <p class="name">NOM</p>
       <p class="capacity">CAPACITÉ</p>
       <p class="description">DESCRIPTION</p>
-      <p class="equipments">ÈQUIPEMENTS</p>
+      <p class="equipments">ÉQUIPEMENTS</p>
       <p class="reservation">RÉSERVATION</p>
     </div>
 
